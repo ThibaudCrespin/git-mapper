@@ -1,0 +1,24 @@
+{
+  "name": "git-mapper",
+  "version": "1.0.0",
+  "description": "Representing git commits around the world",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThibaudCrespin/git-mapper.git"
+  },
+  "keywords": [
+    "axidraw",
+    "github",
+    "ecv"
+  ],
+  "author": "Thibaud Crespin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThibaudCrespin/git-mapper/issues"
+  },
+  "homepage": "https://github.com/ThibaudCrespin/git-mapper#readme"
+}
