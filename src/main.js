@@ -1,5 +1,6 @@
 import Marker from './marker';
 import * as api from './api';
+import './style.css';
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
