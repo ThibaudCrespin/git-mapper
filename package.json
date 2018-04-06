@@ -31,5 +31,7 @@
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "dotenv-webpack": "^1.5.5"
+  }
 }

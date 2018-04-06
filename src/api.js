@@ -1,11 +1,11 @@
 const API = {
     github: {
         url: 'https://api.github.com',
-        key: '1de997286d1b4cdf1a4a9a64486a5da398b6e41a'
+        key: process.env.GITHUB_API_KEY
     },
     google: {
         url: 'https://maps.googleapis.com/maps/api/geocode/json',
-        key: 'AIzaSyDFIHfs9c_NSbtoGfiCcOFXIy53e6tP2PQ'
+        key: process.env.GMAPS_API_KEY
     }
 }
 
@@ -13,13 +13,14 @@ let request = (url) => {
     return new Request(url, {
         method: 'GET',
         headers: new Headers({
-            'Authorization': `token ${API.github.key}`
-        })
+            'Authorization': `token ${API.github.key}`,
+        }),
+        mode: 'cors'
     });
 }
 
-export async function getRepoStars (owner, repo) {
-    let response = await fetch(request(`${API.github.url}/repos/${owner}/${repo}/stargazers?per_page=20`));
+export async function getRepoStars (owner, repo, quantity) {
+    let response = await fetch(request(`${API.github.url}/repos/${owner}/${repo}/stargazers?per_page=${quantity}`));
     return response.json();
 }
 

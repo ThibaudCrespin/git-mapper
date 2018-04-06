@@ -10,6 +10,7 @@ let leftPressed = false;
 
 let repo = 'angular';
 let owner = 'angular';
+let quantity = 10;
 
 const markers = [];
 
@@ -32,31 +33,25 @@ const fetchUser = (star) => {
 ctx.translate(canvas.width/2, canvas.height/2);
 
 const draw = () => {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-	/*for(let i = 0; i<markers.length; i++){
-		if(i != 0){
+    markers.forEach((m, i) => {
+		/*if(i != 0){
 			if(markers[i].compare(markers[i-1]) >= 5){
 				markers[i-1].remove();
-				markers[i].growSize();
+				m.growSize();
 			}
-		}
-		markers[i].draw(ctx);
-	}*/
-	
-    markers.forEach(m => {
+		}*/
 		m.draw(ctx);
-    });
-	
-    requestAnimationFrame(draw);
+	});
+
+	requestAnimationFrame(draw);
 };
 
 const init =() => {
-	api.getRepoStars(owner, repo).then( stars => {
+	api.getRepoStars(owner, repo, quantity).then( stars => {
 		stars.forEach( star => {
 			fetchUser(star);
 		});
+		draw();
 	});
-	draw();
 };
 init();

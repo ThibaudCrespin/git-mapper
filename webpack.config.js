@@ -1,8 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
-const plugins = [ new HtmlWebpackPlugin({ template: 'src/index.html' })];
+const plugins = [ 
+    new HtmlWebpackPlugin({ template: 'src/index.html' }),
+    new Dotenv()
+];
 // plugins.push(new UglifyJsPlugin());
 
 module.exports = {
