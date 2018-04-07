@@ -11,12 +11,13 @@ class Config {
             size: 10,
             growth: 5,
             color: '#000000'
-        }
+        };
+        this.filename = 'canvas';
     }
 
     export() {
         let svgExport = this.ctx.getSerializedSvg();
-        let filename = 'canvas.svg';
+        let filename = `${this.filename}.svg`;
     
         let pseudolink = document.createElement('a');
         pseudolink.setAttribute('href', 'data:image/svg+xml;charset=utf-8, ' + encodeURIComponent(svgExport));

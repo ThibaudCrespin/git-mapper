@@ -82,5 +82,6 @@ marker.add(params.marker, 'growth', 0, 50, 1).onFinishChange(newValue => {
 marker.addColor(params.marker, 'color').onFinishChange(newValue => {
 	init();
 });
+gui.add(params, 'filename');
 gui.add(params, 'export');
 gui.close();
