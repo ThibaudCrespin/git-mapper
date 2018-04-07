@@ -7,7 +7,10 @@ const plugins = [
     new HtmlWebpackPlugin({ template: 'src/index.html' }),
     new Dotenv()
 ];
-// plugins.push(new UglifyJsPlugin());
+
+if (process.env.NODE_ENV === 'production') {
+    plugins.push(new UglifyJSPlugin())
+}
 
 module.exports = {
     entry: './src/main.js',

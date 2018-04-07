@@ -2,6 +2,10 @@ import Marker from './marker';
 import * as api from './api';
 import './style.css';
 
+import * as _ from 'lodash';
+import dat from 'dat.gui';
+import C2S from 'canvas2svg';
+
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
@@ -34,16 +38,13 @@ ctx.translate(canvas.width/2, canvas.height/2);
 
 const draw = () => {
     markers.forEach((m, i) => {
-		/*if(i != 0){
-			if(markers[i].compare(markers[i-1]) >= 5){
-				markers[i-1].remove();
-				m.growSize();
-			}
-		}*/
-		m.draw(ctx);
+		let tmp = _.find(markers, n => {return m.distance(n) < 30;});
+		tmp.growSize();
+		tmp.draw(ctx);
+		if(!(tmp.d > 10)){
+			m.draw(ctx);
+		}
 	});
-
-	requestAnimationFrame(draw);
 };
 
 const init =() => {
@@ -51,7 +52,7 @@ const init =() => {
 		stars.forEach( star => {
 			fetchUser(star);
 		});
-		draw();
+		setTimeout(draw, 3000);
 	});
 };
 init();
