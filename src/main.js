@@ -1,4 +1,5 @@
 import Marker from './marker';
+import Config from './config';
 import * as api from './api';
 import './style.css';
 
@@ -10,22 +11,17 @@ const W = 1200;
 const H = 800;
 
 const ctx = new C2S(W, H);
-let svg;
 
-let precision = 30;
-
-let params = {
-	repo : 'angular',
-	owner : 'angular',
-	quantity : 10
-}
+let params = new Config(ctx);
 
 let markers = [];
+
+ctx.translate(W/2, H/2);
 
 const fetchLocation = (location) => {
 	api.getGeoloc(location).then( res => {
 		if(res.status === 'OK'){
-			markers.push( new Marker(W, H, res.results[0].geometry.location) );
+			markers.push( new Marker(W, H, res.results[0].geometry.location, params.marker.size, params.marker.growth, params.marker.color) );
 		}
 	});
 }
@@ -38,16 +34,12 @@ const fetchUser = (star) => {
 	});
 }
 
-ctx.translate(W/2, H/2);
-
 const draw = () => {
     markers.forEach((m, i) => {
-		let tmp = _.find(markers, n => {return m.distance(n) < precision;});
+		let tmp = _.find(markers, n => { return m.distance(n) < (params.marker.precision*100 + 0.1) });
 		tmp.growSize();
 		tmp.draw(ctx);
-		if(tmp.d > 10){
-			precision += 2;
-		} else {
+		if(!(tmp.d > 10)){
 			m.draw(ctx);
 		}
 	});
@@ -55,44 +47,40 @@ const draw = () => {
 
 const init =() => {
 	ctx.clearRect(-W, -H, W*2, H*2);
-	api.getRepoStars(params.owner, params.repo, params.quantity).then( stars => {
+	api.getRepoStars(params.repository.owner, params.repository.name, params.marker.quantity).then( stars => {
 		markers = [];
 		stars.forEach( star => {
 			fetchUser(star);
 		});
 		setTimeout(draw, 3000);
-		svg = ctx.getSvg();
-		document.querySelector('body').appendChild(svg);
+		document.querySelector('body').appendChild(ctx.getSvg());
 	});
 };
 init();
 
 const gui = new dat.GUI();
-gui.add(params, 'owner').onChange(newValue => {
-	params.owner = newValue;
+const repo = gui.addFolder('repository');
+repo.add(params.repository, 'owner').onFinishChange(newValue => {
 	init();
-	
-})
-gui.add(params, 'repo').onChange(newValue => {
-	params.repo = newValue;
-	init();
-})
-gui.add(params, 'quantity', 1, 500, 10).onChange(newValue => {
-	params.quantity = newValue;
-	init();
-})
-
-
-
-document.querySelector('#export').addEventListener('click', () => {
-  let svgExport = ctx.getSerializedSvg();
-  let filename = 'canvas.svg';
-
-  let pseudolink = document.createElement('a');
-  pseudolink.setAttribute('href', 'data:image/svg+xml;charset=utf-8, ' + encodeURIComponent(svgExport));
-  pseudolink.setAttribute('download', filename);
-  pseudolink.style.display = 'none';
-  document.body.appendChild(pseudolink);
-  pseudolink.click();
-  document.body.removeChild(pseudolink);
 });
+repo.add(params.repository, 'name').onFinishChange(newValue => {
+	init();
+});
+const marker = gui.addFolder('marker');
+marker.add(params.marker, 'quantity', 1, 500, 10).onFinishChange(newValue => {
+	init();
+});
+marker.add(params.marker, 'size', 0, 30, 1).onFinishChange(newValue => {
+	init();
+});
+marker.add(params.marker, 'precision', 0, 1, 0.1).onFinishChange(newValue => {
+	init();
+});
+marker.add(params.marker, 'growth', 0, 50, 1).onFinishChange(newValue => {
+	init();
+});
+marker.addColor(params.marker, 'color').onFinishChange(newValue => {
+	init();
+});
+gui.add(params, 'export');
+gui.close();
