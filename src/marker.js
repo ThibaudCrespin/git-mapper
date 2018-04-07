@@ -1,13 +1,14 @@
 class Marker {
 
     /**
-     *  @param canvas - canvas object
+     *  @param {Number} width - object width
+     *  @param {Number} heigth - object heigth
      *  @param {any[]} location - location object of marker
     */
-    constructor(canvas, location) {
+    constructor(width, height, location) {
         this.d = 5;
-        this.x = (location.lng * canvas.width) / 360;
-        this.y = (-location.lat * canvas.height) / 180;
+        this.x = (location.lng * width) / 360;
+        this.y = (-location.lat * height) / 180;
     }
 
     remove() {
