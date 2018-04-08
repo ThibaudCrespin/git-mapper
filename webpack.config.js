@@ -1,15 +1,23 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 const plugins = [ 
-    new HtmlWebpackPlugin({ template: 'src/index.html' }),
-    new Dotenv()
+    new HtmlWebpackPlugin({ template: 'src/index.html' })
 ];
 
 if (process.env.NODE_ENV === 'production') {
-    plugins.push(new UglifyJSPlugin())
+    plugins.push(
+        new UglifyJSPlugin(),
+        new Dotenv({
+            path: './.env.prod' // load this now instead of the ones in '.env'
+        })
+    )
+} else {
+    plugins.push(
+        new Dotenv()
+    )
 }
 
 module.exports = {
