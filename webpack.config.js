@@ -34,11 +34,11 @@ module.exports = {
                 use: [ 'style-loader', 'css-loader' ]
             },
             {
-                test: /\.(png|jpg|gif|svg)$/,
+                test: /\.(svg)$/,
                 use: [
                   {
                     loader: 'file-loader',
-                    options: {}  
+                    options: {name: 'map.svg'}  
                   }
                 ]
               }
