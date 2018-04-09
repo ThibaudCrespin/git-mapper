@@ -7,16 +7,14 @@ import * as _ from 'lodash';
 import dat from 'dat.gui';
 import C2S from 'canvas2svg';
 
-const W = 1200;
-const H = 800;
+const W = window.innerWidth;
+const H = window.innerHeight;
 
-const ctx = new C2S(W, H);
+let ctx = null;
 
 let params = new Config(ctx);
 
 let markers = [];
-
-ctx.translate(W/2, H/2);
 
 const fetchLocation = (location) => {
 	api.getGeoloc(location).then( res => {
@@ -45,15 +43,22 @@ const draw = () => {
 	});
 };
 
-const init =() => {
-	ctx.clearRect(-W, -H, W*2, H*2);
+const init = () => {
+	if(ctx){
+		document.querySelector('.svg').removeChild(document.querySelector('svg'));
+	}
+	ctx =  new C2S(W, H);
+	ctx.translate(W/2, H/2);
+	ctx.fillStyle="rgba(0, 0, 200, 0)";
+	ctx.fillRect(-W, -H, W, H);
+	
 	api.getRepoStars(params.repository.owner, params.repository.name, params.marker.quantity).then( stars => {
 		markers = [];
 		stars.forEach( star => {
 			fetchUser(star);
 		});
 		setTimeout(draw, 3000);
-		document.querySelector('body').appendChild(ctx.getSvg());
+		document.querySelector('.svg').appendChild(ctx.getSvg());
 	});
 };
 init();
